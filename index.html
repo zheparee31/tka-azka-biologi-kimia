@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#211619">
+  <meta name="description" content="Ruang belajar Biologi dan Kimia TKA yang interaktif untuk Azka.">
+  <title>Ruang TKA Azka — Biologi &amp; Kimia</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #171113;
+      --panel: #21191b;
+      --card: #281f21;
+      --ink: #fff4ed;
+      --muted: #c1adb0;
+      --line: #49373b;
+      --rose: #ff7180;
+      --rose-dark: #ef5368;
+      --gold: #f1c58b;
+      --soft: #3a252b;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 320px;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 85% 0%, #812c3a38, transparent 35rem),
+        radial-gradient(#ffffff08 .6px, transparent .6px);
+      background-size: auto, 11px 11px;
+    }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar { display: flex; min-height: 72px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-size: .8rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    .brand-mark { display: grid; width: 35px; height: 35px; place-items: center; border: 1px solid #ff718080; border-radius: 50%; color: var(--rose); font-size: 1.05rem; }
+    .top-note { color: var(--muted); font-size: .72rem; }
+    .hero { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 30px; padding: 68px 0 49px; }
+    .eyebrow, .section-kicker { margin: 0 0 15px; color: var(--gold); font-size: .68rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 730px; margin-bottom: 17px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.8rem, 7vw, 5.8rem); font-weight: 500; letter-spacing: -.065em; line-height: .98; }
+    h1 em { color: var(--rose); font-weight: 500; }
+    .hero-copy { max-width: 620px; margin: 0; color: var(--muted); font-size: .96rem; line-height: 1.8; }
+    .hero-seal { width: 142px; height: 142px; display: grid; align-content: center; justify-items: center; border: 1px solid #f1c58b66; border-radius: 50%; color: var(--gold); background: #2b2020; box-shadow: 0 0 0 10px #f1c58b0b, 0 0 45px #e45a6d1c; text-align: center; transform: rotate(5deg); }
+    .hero-seal b { font-family: Georgia, serif; font-size: 2.25rem; font-weight: 500; }
+    .hero-seal span { max-width: 90px; font-size: .57rem; font-weight: 800; letter-spacing: .13em; line-height: 1.5; text-transform: uppercase; }
+    .intro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 0 28px; }
+    .intro-card { padding: 17px; border: 1px solid var(--line); border-radius: 14px; background: #20181a; }
+    .intro-card b { display: block; margin-bottom: 6px; color: var(--gold); font-size: .8rem; }
+    .intro-card p { margin: 0; color: var(--muted); font-size: .72rem; line-height: 1.6; }
+    .workspace { padding: 23px; border: 1px solid var(--line); border-radius: 22px; background: #1d1719eF; box-shadow: 0 20px 65px #0005; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .tabs { display: inline-flex; gap: 5px; padding: 5px; border: 1px solid var(--line); border-radius: 13px; background: #171214; }
+    .tab { min-height: 40px; padding: 0 14px; border: 0; border-radius: 9px; color: var(--muted); background: transparent; cursor: pointer; font-size: .79rem; font-weight: 750; }
+    .tab[aria-pressed="true"] { color: #231719; background: var(--rose); }
+    .search-wrap { position: relative; flex: 1; min-width: 205px; }
+    .search { width: 100%; min-height: 46px; padding: 0 14px 0 40px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: #171214; font-size: .82rem; }
+    .search-icon { position: absolute; top: 50%; left: 14px; color: var(--gold); transform: translateY(-50%); }
+    .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 19px 0; }
+    .filter-label { margin-right: 3px; color: var(--muted); font-size: .71rem; }
+    .chip { min-height: 33px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: #211a1c; cursor: pointer; font-size: .7rem; font-weight: 700; }
+    .chip[aria-pressed="true"] { border-color: #ff718088; color: #ffd9d7; background: var(--soft); }
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
+    .section-head h2 { margin: 0; font-size: 1rem; }
+    .count { color: var(--muted); font-size: .72rem; }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .card { display: flex; min-height: 212px; flex-direction: column; padding: 17px; border: 1px solid var(--line); border-radius: 15px; background: var(--card); transition: border-color .18s, transform .18s, box-shadow .18s; }
+    .card:hover { border-color: #ff718088; box-shadow: 0 12px 25px #0003; transform: translateY(-2px); }
+    .tag { align-self: flex-start; padding: 5px 8px; border-radius: 7px; color: var(--gold); background: #f1c58b16; font-size: .62rem; font-weight: 800; }
+    .card h3 { margin: 13px 0 6px; font-size: .93rem; }
+    .card p { margin: 0 0 12px; color: var(--muted); font-size: .72rem; line-height: 1.55; }
+    .equation { margin-top: auto; padding: 11px 0; border-top: 1px dashed var(--line); color: #ffd3a0; font-family: "SFMono-Regular", Consolas, monospace; font-size: .88rem; font-weight: 750; }
+    .card-action { align-self: flex-start; min-height: 32px; padding: 0 10px; border: 1px solid #ff718066; border-radius: 8px; color: #ffc4c8; background: #ff71800c; cursor: pointer; font-size: .68rem; font-weight: 750; }
+    .study-grid { display: grid; grid-template-columns: 1fr .85fr; gap: 13px; margin: 18px 0 34px; }
+    .study-panel { padding: 21px; border: 1px solid var(--line); border-radius: 17px; background: var(--panel); }
+    .study-panel h2 { margin-bottom: 7px; font-size: 1rem; }
+    .study-panel > p { margin-bottom: 14px; color: var(--muted); font-size: .75rem; line-height: 1.6; }
+    .topic-list { display: grid; gap: 8px; }
+    .topic-item { padding: 11px 12px; border: 1px solid #49373b99; border-radius: 10px; background: #171214; }
+    .topic-item b { display: block; margin-bottom: 4px; color: #ffd3a0; font-size: .75rem; }
+    .topic-item span { color: var(--muted); font-size: .7rem; line-height: 1.55; }
+    .quiz-question { margin: 12px 0; color: var(--ink); font-size: .85rem; font-weight: 700; line-height: 1.6; }
+    .quiz-options { display: grid; gap: 7px; }
+    .quiz-option { min-height: 38px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: #171214; cursor: pointer; font-size: .72rem; text-align: left; }
+    .quiz-option:hover:not(:disabled) { border-color: var(--rose); }
+    .quiz-option.correct { border-color: #638c6b; color: #c8f0cb; background: #1d3025; }
+    .quiz-option.incorrect { border-color: #a85e62; color: #ffd0cf; background: #351f24; }
+    .feedback { min-height: 36px; margin: 10px 0; color: var(--gold); font-size: .72rem; line-height: 1.55; }
+    .next { min-height: 35px; padding: 0 12px; border: 0; border-radius: 9px; color: #241719; background: var(--gold); cursor: pointer; font-size: .7rem; font-weight: 800; }
+    footer { padding: 20px 0 30px; border-top: 1px solid var(--line); color: var(--rose); font-family: Georgia, serif; font-size: clamp(1.05rem, 2.7vw, 1.4rem); font-style: italic; text-align: center; }
+    dialog { width: min(490px, calc(100% - 28px)); padding: 0; border: 1px solid #79535b; border-radius: 18px; color: var(--ink); background: #21191b; box-shadow: 0 25px 90px #000b; }
+    dialog::backdrop { background: #080607d9; backdrop-filter: blur(4px); }
+    .dialog-inner { padding: 22px; }
+    .dialog-head { display: flex; justify-content: space-between; gap: 14px; }
+    .dialog-head h2 { margin: 10px 0; font-family: Georgia, serif; font-size: 1.45rem; font-weight: 500; }
+    .close { width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: #171214; cursor: pointer; font-size: 1rem; }
+    .dialog-equation { margin: 7px 0 15px; padding: 15px; border-radius: 11px; color: #ffd3a0; background: #3a252b; font-family: Consolas, monospace; font-size: 1.1rem; font-weight: 800; text-align: center; }
+    .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .fields label { display: grid; gap: 6px; color: var(--muted); font-size: .7rem; font-weight: 700; }
+    .fields input { width: 100%; min-height: 42px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: #171214; }
+    .calc-submit { width: 100%; min-height: 42px; margin-top: 13px; border: 0; border-radius: 9px; color: #241719; background: var(--rose); cursor: pointer; font-size: .77rem; font-weight: 800; }
+    .calc-result { min-height: 44px; margin-top: 10px; padding: 11px; border-radius: 9px; color: var(--gold); background: #17251f; font-size: .78rem; line-height: 1.5; }
+    .calc-result.error { color: #ffd0cf; background: #351f24; }
+    .empty { grid-column: 1 / -1; padding: 30px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); text-align: center; }
+    @media (max-width: 760px) {
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .study-grid { grid-template-columns: 1fr; }
+      .hero-seal { width: 112px; height: 112px; }
+    }
+    @media (max-width: 540px) {
+      .wrap { width: calc(100% - 26px); }
+      .topbar { min-height: 62px; }
+      .top-note { max-width: 130px; text-align: right; }
+      .hero { grid-template-columns: 1fr; gap: 20px; padding: 46px 0 30px; }
+      .hero-seal { width: auto; height: auto; display: inline-flex; justify-self: start; gap: 9px; padding: 9px 13px; border-radius: 999px; transform: none; }
+      .hero-seal b { font-size: 1rem; }
+      .hero-seal span { max-width: none; font-size: .58rem; }
+      .intro-grid { grid-template-columns: 1fr; gap: 8px; }
+      .intro-card { padding: 13px; }
+      .workspace { padding: 14px; border-radius: 17px; }
+      .tabs { width: 100%; }
+      .tab { flex: 1; }
+      .search-wrap { min-width: 100%; }
+      .cards { grid-template-columns: 1fr; }
+      .card { min-height: 0; }
+      .fields { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">✿</span>RUANG TKA <span style="color:var(--rose)">AZKA</span></div>
+      <div class="top-note">catatan kecil menuju hari besar ✦</div>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <div>
+          <p class="eyebrow">Teman belajar Biologi &amp; Kimia</p>
+          <h1 id="title">Satu langkah kecil, <em>Azka makin siap.</em></h1>
+          <p class="hero-copy">Rangkuman konsep penting, rumus yang sering dipakai, dan latihan singkat untuk menemani persiapan TKA. Pilih topik, pahami polanya, lalu coba latihan—pelan-pelan juga tetap maju.</p>
+        </div>
+        <div class="hero-seal" aria-label="Semangat belajar, Azka"><b>A ✿</b><span>semangat, Azka</span></div>
+      </section>
+      <section class="intro-grid" aria-label="Panduan belajar">
+        <article class="intro-card"><b>01 · Pahami konsep</b><p>Baca ide inti dulu sebelum menghafal istilah atau persamaan.</p></article>
+        <article class="intro-card"><b>02 · Kenali besaran</b><p>Periksa satuan, simbol, dan informasi yang diketahui di soal.</p></article>
+        <article class="intro-card"><b>03 · Latihan bertahap</b><p>Jawab kuis, cek penjelasan, lalu coba variasi soal lain.</p></article>
+      </section>
+      <section class="workspace" aria-label="Materi dan rumus TKA">
+        <div class="toolbar">
+          <div class="tabs" role="group" aria-label="Pilih mata pelajaran">
+            <button class="tab" type="button" data-subject="bio" aria-pressed="true">🧬 Biologi</button>
+            <button class="tab" type="button" data-subject="chem" aria-pressed="false">⚗️ Kimia</button>
+          </div>
+          <label class="search-wrap"><span class="search-icon" aria-hidden="true">⌕</span><span hidden>Cari materi</span><input id="search" class="search" type="search" placeholder="Cari konsep, rumus, atau kata kunci…" autocomplete="off" aria-label="Cari materi dan rumus"></label>
+        </div>
+        <div class="filters" id="filters" aria-label="Filter topik"></div>
+        <div class="section-head"><h2 id="listTitle">Materi Biologi</h2><span class="count" id="count" aria-live="polite"></span></div>
+        <div class="cards" id="cards"></div>
+      </section>
+      <section class="study-grid" aria-label="Ringkasan dan latihan">
+        <article class="study-panel">
+          <p class="section-kicker">Peta konsep ringkas</p>
+          <h2 id="studyTitle">Yang perlu diingat · Biologi</h2>
+          <p>Gunakan ringkasan ini sebagai pengingat, lalu hubungkan dengan contoh soal.</p>
+          <div class="topic-list" id="topicList"></div>
+        </article>
+        <article class="study-panel" id="quizPanel">
+          <p class="section-kicker">Cek pemahaman</p>
+          <h2>Latihan kilat Azka</h2>
+          <p>Satu pertanyaan tiap giliran, lengkap dengan pembahasan singkat.</p>
+          <div id="quizArea"></div>
+          <button class="next" id="nextQuestion" type="button">Soal berikutnya ↻</button>
+        </article>
+      </section>
+    </main>
+    <footer>semangat belajar tka nya sayanggg -ghifari ganteng</footer>
+  </div>
+  <dialog id="calcDialog" aria-labelledby="calcTitle"><div class="dialog-inner" id="dialogContent"></div></dialog>
+  <script>
+    const materials = {
+      bio: [
+        {topic:"Sel & biomolekul",title:"Membran sel dan transport",description:"Membran fosfolipid bersifat selektif. Difusi mengikuti gradien konsentrasi; osmosis adalah perpindahan air melalui membran semipermeabel.",formula:"difusi: tinggi → rendah",summary:"Bedakan difusi sederhana, difusi terfasilitasi, osmosis, dan transpor aktif yang memerlukan ATP."},
+        {topic:"Sel & biomolekul",title:"Enzim dan faktor kerja",description:"Enzim menurunkan energi aktivasi tanpa habis bereaksi. Suhu dan pH ekstrem dapat mengubah bentuk sisi aktif.",formula:"E + S ⇌ ES → E + P",summary:"Model enzim-substrat; laju dipengaruhi konsentrasi substrat, enzim, suhu, pH, dan inhibitor."},
+        {topic:"Genetika",title:"Hukum Hardy–Weinberg",description:"Model frekuensi alel dan genotipe pada populasi ideal yang tidak mengalami perubahan evolusioner.",formula:"p + q = 1; p² + 2pq + q² = 1",summary:"p dan q adalah frekuensi alel; p², 2pq, q² adalah frekuensi genotipe. Asumsi: populasi besar, kawin acak, tanpa mutasi, migrasi, dan seleksi." ,calculator:"hardy"},
+        {topic:"Genetika",title:"Pewarisan Mendel",description:"Segregasi memisahkan pasangan alel ke gamet; asortasi bebas berlaku bagi gen yang tidak terpaut.",formula:"Aa × Aa → 1 AA : 2 Aa : 1 aa",summary:"Persilangan monohibrid heterozigot memberi rasio genotipe 1:2:1 dan fenotipe dominan-resesif 3:1 pada dominansi penuh."},
+        {topic:"Ekologi",title:"Pertumbuhan populasi",description:"Perubahan jumlah individu ditentukan kelahiran, kematian, imigrasi, dan emigrasi.",formula:"ΔN = (B + I) − (D + E)",summary:"Pertumbuhan eksponensial berbentuk J saat sumber daya melimpah; logistik berbentuk S saat mendekati daya dukung." ,calculator:"population"},
+        {topic:"Ekologi",title:"Produktivitas ekosistem",description:"Produktivitas primer bersih adalah energi tersimpan setelah respirasi produsen.",formula:"NPP = GPP − R",summary:"GPP: produktivitas primer kotor; R: respirasi produsen; NPP: energi yang tersedia bagi tingkat trofik berikutnya.",calculator:"npp"},
+        {topic:"Fisiologi",title:"Fotosintesis",description:"Energi cahaya digunakan untuk membentuk glukosa dan melepaskan oksigen.",formula:"6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂",summary:"Reaksi terang di tilakoid menghasilkan ATP, NADPH, dan O₂; siklus Calvin di stroma memfiksasi CO₂."},
+        {topic:"Fisiologi",title:"Respirasi aerob",description:"Glukosa diuraikan dengan oksigen untuk menghasilkan ATP, karbon dioksida, dan air.",formula:"C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP",summary:"Glikolisis di sitoplasma; siklus Krebs dan rantai transpor elektron di mitokondria."},
+        {topic:"Evolusi",title:"Seleksi alam",description:"Individu dengan sifat yang meningkatkan keberhasilan reproduksi cenderung mewariskan alelnya lebih sering.",formula:"variasi → seleksi → perubahan frekuensi alel",summary:"Evolusi populasi dapat dipicu seleksi alam, mutasi, aliran gen, dan hanyutan genetik."}
+      ],
+      chem: [
+        {topic:"Stoikiometri",title:"Jumlah mol",description:"Hubungan jumlah zat, massa, dan massa molar.",formula:"n = m / Mᵣ",summary:"Gunakan massa dalam gram dan massa molar dalam g/mol sehingga n diperoleh dalam mol.",calculator:"moles"},
+        {topic:"Stoikiometri",title:"Konsentrasi molaritas",description:"Jumlah mol zat terlarut dalam setiap liter larutan.",formula:"M = n / V",summary:"M dalam mol/L; ubah mL ke L sebelum memasukkan volume.",calculator:"molarity"},
+        {topic:"Stoikiometri",title:"Jumlah partikel",description:"Mengubah jumlah mol menjadi jumlah atom, molekul, atau satuan formula.",formula:"N = n × Nₐ",summary:"Bilangan Avogadro Nₐ ≈ 6,022 × 10²³ partikel/mol." ,calculator:"particles"},
+        {topic:"Larutan",title:"Pengenceran",description:"Jumlah mol zat terlarut tetap saat larutan ditambah pelarut.",formula:"M₁V₁ = M₂V₂",summary:"Pastikan satuan V₁ dan V₂ sama. Rumus berlaku untuk pengenceran tanpa reaksi.",calculator:"dilution"},
+        {topic:"Asam & basa",title:"pH asam kuat",description:"pH menyatakan tingkat keasaman berdasarkan konsentrasi ion hidrogen.",formula:"pH = −log₁₀[H⁺]",summary:"Untuk asam kuat monoprotik, [H⁺] kira-kira sama dengan konsentrasi asam; pH + pOH = 14 pada 25 °C.",calculator:"ph"},
+        {topic:"Asam & basa",title:"pOH dan ion hidroksida",description:"pOH mengukur konsentrasi ion hidroksida dalam larutan.",formula:"pOH = −log₁₀[OH⁻]",summary:"Pada 25 °C, pH + pOH = 14. Untuk basa kuat, hitung [OH⁻] dengan memperhatikan jumlah ionnya.",calculator:"poh"},
+        {topic:"Gas",title:"Persamaan gas ideal",description:"Hubungan tekanan, volume, jumlah mol, dan suhu mutlak gas.",formula:"PV = nRT",summary:"Gunakan suhu dalam kelvin; R = 0,08206 L·atm·mol⁻¹·K⁻¹ atau 8,314 J·mol⁻¹·K⁻¹.",calculator:"gas"},
+        {topic:"Reaksi",title:"Persen hasil reaksi",description:"Membandingkan hasil nyata dengan hasil teoritis dari perhitungan stoikiometri.",formula:"% hasil = (nyata / teori) × 100%",summary:"Seimbangkan reaksi terlebih dahulu untuk menentukan pereaksi pembatas dan hasil teoritis.",calculator:"yield"},
+        {topic:"Redoks",title:"Bilangan oksidasi",description:"Alat untuk melacak perpindahan elektron dalam reaksi redoks.",formula:"kenaikan biloks = oksidasi",summary:"Oksidasi melepaskan elektron dan biloks naik; reduksi menerima elektron dan biloks turun."},
+        {topic:"Ikatan",title:"Bentuk molekul VSEPR",description:"Pasangan elektron di sekitar atom pusat saling tolak dan menentukan geometri molekul.",formula:"AX₂ linear · AX₃ trigonal · AX₄ tetrahedral",summary:"Pasangan elektron bebas menekan sudut ikatan; pertimbangkan jumlah domain elektron di atom pusat."}
+      ]
+    };
+    const topics = {
+      bio: [
+        ["Organisasi kehidupan","Sel → jaringan → organ → sistem organ → organisme."],
+        ["Materi genetik","DNA menyimpan informasi; ekspresi gen melibatkan transkripsi dan translasi."],
+        ["Aliran energi","Energi mengalir dari produsen ke konsumen dan berkurang pada tiap tingkat trofik."],
+        ["Homeostasis","Tubuh menjaga kondisi internal melalui mekanisme umpan balik, terutama umpan balik negatif."]
+      ],
+      chem: [
+        ["Konsep mol","Persamaan reaksi setara memberi perbandingan mol sesuai koefisien."],
+        ["Struktur atom","Nomor atom = jumlah proton; nomor massa = proton + neutron."],
+        ["Kesetimbangan","Pada kesetimbangan dinamis, laju reaksi maju sama dengan laju balik."],
+        ["Ikatan kimia","Ikatan ion melibatkan serah-terima elektron; kovalen berbagi pasangan elektron."]
+      ]
+    };
+    const quizzes = {
+      bio: [
+        {q:"Organel utama tempat respirasi aerob berlangsung adalah…",o:["Ribosom","Mitokondria","Badan Golgi"],a:1,x:"Mitokondria menjadi tempat siklus Krebs dan rantai transpor elektron."},
+        {q:"Pada persilangan Aa × Aa, peluang keturunan aa adalah…",o:["25%","50%","75%"],a:0,x:"Rasio genotipe 1 AA : 2 Aa : 1 aa, sehingga aa = 1/4."},
+        {q:"Perpindahan air melalui membran selektif disebut…",o:["Osmosis","Transkripsi","Eksositosis"],a:0,x:"Osmosis adalah perpindahan air melalui membran semipermeabel."},
+        {q:"Jika GPP 900 dan respirasi 350, NPP adalah…",o:["550","1.250","350"],a:0,x:"NPP = GPP − R = 900 − 350 = 550."}
+      ],
+      chem: [
+        {q:"Berapa mol dalam 18 g H₂O (Mᵣ = 18)?",o:["0,5 mol","1 mol","18 mol"],a:1,x:"n = m/Mᵣ = 18/18 = 1 mol."},
+        {q:"pH larutan netral pada 25 °C adalah…",o:["0","7","14"],a:1,x:"Pada 25 °C larutan netral memiliki pH 7."},
+        {q:"Suhu 27 °C kira-kira sama dengan…",o:["246 K","273 K","300 K"],a:2,x:"T(K) = T(°C) + 273,15, jadi sekitar 300 K."},
+        {q:"Dalam reaksi redoks, zat yang mengalami oksidasi…",o:["Menerima elektron","Melepas elektron","Tidak berubah"],a:1,x:"Oksidasi adalah pelepasan elektron dan kenaikan bilangan oksidasi."}
+      ]
+    };
+    const state = {subject:"bio", topic:"Semua", query:""};
+    const cards = document.querySelector("#cards");
+    const filters = document.querySelector("#filters");
+    const search = document.querySelector("#search");
+    const dialog = document.querySelector("#calcDialog");
+    const dialogContent = document.querySelector("#dialogContent");
+    let quizIndex = 0;
+
+    function renderFilters() {
+      const values = ["Semua", ...new Set(materials[state.subject].map((item) => item.topic))];
+      if (!values.includes(state.topic)) state.topic = "Semua";
+      filters.replaceChildren();
+      const label = document.createElement("span");
+      label.className = "filter-label";
+      label.textContent = "Topik:";
+      filters.append(label);
+      values.forEach((topic) => {
+        const button = document.createElement("button");
+        button.className = "chip";
+        button.type = "button";
+        button.textContent = topic;
+        button.setAttribute("aria-pressed", String(state.topic === topic));
+        button.addEventListener("click", () => { state.topic = topic; render(); });
+        filters.append(button);
+      });
+    }
+    function renderCards() {
+      const query = state.query.trim().toLocaleLowerCase("id");
+      const shown = materials[state.subject].filter((item) =>
+        (state.topic === "Semua" || item.topic === state.topic) &&
+        `${item.topic} ${item.title} ${item.description} ${item.formula}`.toLocaleLowerCase("id").includes(query));
+      document.querySelector("#count").textContent = `${shown.length} materi`;
+      cards.replaceChildren();
+      if (!shown.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "Materi belum ditemukan. Coba kata kunci atau topik lain.";
+        cards.append(empty);
+        return;
+      }
+      shown.forEach((item) => {
+        const article = document.createElement("article");
+        article.className = "card";
+        article.innerHTML = `<span class="tag">${item.topic}</span><h3>${item.title}</h3><p>${item.description}</p><div class="equation">${item.formula}</div>${item.calculator ? '<button class="card-action" type="button">Coba hitung →</button>' : ""}`;
+        const action = article.querySelector(".card-action");
+        if (action) action.addEventListener("click", () => openCalculator(item));
+        cards.append(article);
+      });
+    }
+    function renderTopics() {
+      document.querySelector("#studyTitle").textContent = `Yang perlu diingat · ${state.subject === "bio" ? "Biologi" : "Kimia"}`;
+      const list = document.querySelector("#topicList");
+      list.replaceChildren();
+      topics[state.subject].forEach(([title, description]) => {
+        const item = document.createElement("div");
+        item.className = "topic-item";
+        item.innerHTML = `<b>${title}</b><span>${description}</span>`;
+        list.append(item);
+      });
+    }
+    function renderQuiz() {
+      const question = quizzes[state.subject][quizIndex % quizzes[state.subject].length];
+      const area = document.querySelector("#quizArea");
+      area.innerHTML = `<p class="quiz-question">${question.q}</p><div class="quiz-options">${question.o.map((option, index) => `<button class="quiz-option" type="button" data-index="${index}">${option}</button>`).join("")}</div><p class="feedback" aria-live="polite"></p>`;
+      area.querySelectorAll(".quiz-option").forEach((button) => button.addEventListener("click", () => {
+        const selected = Number(button.dataset.index);
+        area.querySelectorAll(".quiz-option").forEach((option) => {
+          option.disabled = true;
+          if (Number(option.dataset.index) === question.a) option.classList.add("correct");
+          else if (Number(option.dataset.index) === selected) option.classList.add("incorrect");
+        });
+        area.querySelector(".feedback").textContent = `${selected === question.a ? "Tepat!" : "Belum tepat."} ${question.x}`;
+      }));
+    }
+    function render() {
+      document.querySelectorAll(".tab").forEach((tab) => tab.setAttribute("aria-pressed", String(tab.dataset.subject === state.subject)));
+      document.querySelector("#listTitle").textContent = `Materi ${state.subject === "bio" ? "Biologi" : "Kimia"}`;
+      renderFilters();
+      renderCards();
+      renderTopics();
+      renderQuiz();
+    }
+    function openCalculator(item) {
+      const fields = {
+        hardy: [["q","Frekuensi alel resesif (q)"]],
+        population: [["birth","Kelahiran (B)"],["immigration","Imigrasi (I)"],["death","Kematian (D)"],["emigration","Emigrasi (E)"]],
+        npp: [["gpp","Produktivitas kotor (GPP)"],["respiration","Respirasi (R)"]],
+        moles: [["mass","Massa zat (g)"],["molarMass","Massa molar (g/mol)"]],
+        molarity: [["moles","Jumlah mol (mol)"],["volume","Volume larutan (L)"]],
+        particles: [["moles","Jumlah mol (mol)"]],
+        dilution: [["m1","M₁ (mol/L)"],["v1","V₁ (L)"],["v2","V₂ (L)"]],
+        ph: [["concentration","Konsentrasi [H⁺] (mol/L)"]],
+        poh: [["concentration","Konsentrasi [OH⁻] (mol/L)"]],
+        gas: [["pressure","Tekanan (atm)"],["volume","Volume (L)"],["temperature","Suhu (K)"]],
+        yield: [["actual","Hasil nyata"],["theoretical","Hasil teoritis"]]
+      }[item.calculator];
+      dialogContent.innerHTML = `<div class="dialog-head"><div><span class="tag">${item.topic}</span><h2 id="calcTitle">${item.title}</h2></div><button class="close" type="button" aria-label="Tutup">×</button></div><div class="dialog-equation">${item.formula}</div><form id="calculatorForm"><div class="fields">${fields.map(([name,label]) => `<label>${label}<input name="${name}" type="number" step="any" required></label>`).join("")}</div><button class="calc-submit" type="submit">Hitung ✨</button></form><div class="calc-result" id="calcResult" aria-live="polite">Masukkan nilai yang diketahui. Pastikan satuan sesuai.</div>`;
+      dialogContent.querySelector(".close").addEventListener("click", () => dialog.close());
+      dialogContent.querySelector("#calculatorForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const data = Object.fromEntries(new FormData(event.currentTarget).entries());
+        const value = (key) => Number(data[key]);
+        let answer;
+        let label = "Hasil";
+        const result = dialogContent.querySelector("#calcResult");
+        if (Object.values(data).some((entry) => !Number.isFinite(Number(entry)))) {
+          result.classList.add("error");
+          result.textContent = "Masukkan angka yang valid pada semua kolom.";
+          return;
+        }
+        if (item.calculator === "hardy") {
+          const q = value("q");
+          if (q < 0 || q > 1) answer = NaN;
+          else { const p = 1-q; answer = `p = ${p.toFixed(4)} · q² = ${(q*q).toFixed(4)} · 2pq = ${(2*p*q).toFixed(4)}`; label = "Frekuensi"; }
+        } else if (item.calculator === "population") { answer = value("birth")+value("immigration")-value("death")-value("emigration"); label="Perubahan populasi (ΔN)"; }
+        else if (item.calculator === "npp") { answer = value("gpp")-value("respiration"); label="NPP"; }
+        else if (item.calculator === "moles") { answer = value("mass")/value("molarMass"); label="Jumlah mol"; }
+        else if (item.calculator === "molarity") { answer = value("moles")/value("volume"); label="Molaritas"; }
+        else if (item.calculator === "particles") { answer = value("moles")*6.022e23; label="Jumlah partikel"; }
+        else if (item.calculator === "dilution") { answer = value("m1")*value("v1")/value("v2"); label="M₂"; }
+        else if (item.calculator === "ph") { answer = -Math.log10(value("concentration")); label="pH"; }
+        else if (item.calculator === "poh") { answer = -Math.log10(value("concentration")); label="pOH"; }
+        else if (item.calculator === "gas") { answer = value("pressure")*value("volume")/(0.08206*value("temperature")); label="Jumlah mol (n)"; }
+        else if (item.calculator === "yield") { answer = value("actual")/value("theoretical")*100; label="Persen hasil"; }
+        const zeroDivisor = {
+          moles: ["molarMass"],
+          molarity: ["volume"],
+          dilution: ["v2"],
+          gas: ["temperature"],
+          yield: ["theoretical"]
+        }[item.calculator]?.some((key) => value(key) === 0);
+        const invalidConcentration = ["ph", "poh"].includes(item.calculator) && value("concentration") <= 0;
+        if (zeroDivisor || invalidConcentration || (typeof answer === "number" && !Number.isFinite(answer))) {
+          result.classList.add("error");
+          result.textContent = "Periksa kembali nilai yang dimasukkan. Pembagi dan konsentrasi harus sesuai.";
+          return;
+        }
+        result.classList.remove("error");
+        result.textContent = `${label}: ${typeof answer === "number" ? new Intl.NumberFormat("id-ID",{maximumSignificantDigits:7}).format(answer) : answer}${item.calculator === "yield" ? " %" : item.calculator === "molarity" ? " mol/L" : item.calculator === "particles" ? " partikel" : ""}`;
+      });
+      dialog.showModal();
+    }
+    document.querySelectorAll(".tab").forEach((tab) => tab.addEventListener("click", () => { state.subject=tab.dataset.subject; state.topic="Semua"; quizIndex=0; render(); }));
+    search.addEventListener("input", () => { state.query=search.value; renderCards(); });
+    document.querySelector("#nextQuestion").addEventListener("click", () => { quizIndex++; renderQuiz(); });
+    render();
+  </script>
+</body>
+</html>
